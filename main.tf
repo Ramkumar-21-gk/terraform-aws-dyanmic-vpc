@@ -33,16 +33,28 @@ resource "aws_subnet" "my-subnet" {
 
 # Creating EC2 instances based on variable configuration
 resource "aws_instance" "my_server" {
-  count = length(var.ec2_config)
+  for_each = var.ec2_map
 
-  ami           = var.ec2_config[count.index].ami
-  instance_type = var.ec2_config[count.index].instance_type
+  ami = each.value.ami
+  instance_type = each.value.instance_type
 
-  subnet_id     = element(aws_subnet.my-subnet.*.id, count.index % length(aws_subnet.my-subnet))
+  subnet_id     = element(aws_subnet.my-subnet.*.id, index(keys(var.ec2_map), each.key) % length(aws_subnet.my-subnet))
   tags = {
-    Name = "${local.Name}-instance-${count.index}"
+    Name = "${local.Name}-instance-${each.key}"
   }
 }
+# # Creating EC2 instances based on variable configuration
+# resource "aws_instance" "my_server" {
+#   count = length(var.ec2_config)
+
+#   ami           = var.ec2_config[count.index].ami
+#   instance_type = var.ec2_config[count.index].instance_type
+
+#   subnet_id     = element(aws_subnet.my-subnet.*.id, count.index % length(aws_subnet.my-subnet))
+#   tags = {
+#     Name = "${local.Name}-instance-${count.index}"
+#   }
+# }
 # # Creating 4 EC2 instances
 # resource "aws_instance" "my_server" {
 #   ami           = "ami-02b8269d5e85954ef"

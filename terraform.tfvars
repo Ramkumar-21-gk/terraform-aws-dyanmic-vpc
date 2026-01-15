@@ -5,3 +5,14 @@ ec2_config = [ {
   ami = "ami-0ced6a024bb18ff2e", #Amazon Linux 2
   instance_type = "t3.micro"
 } ]
+
+ec2_map = {
+  "ubuntu" = {
+    ami = "ami-02b8269d5e85954ef", #UBUNTU,
+    instance_type = "t3.micro"
+  },
+  "amazon_linux" = {
+    ami = "ami-0ced6a024bb18ff2e", #Amazon Linux 2
+    instance_type = "t3.micro"
+  }
+}
